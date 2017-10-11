@@ -3,15 +3,14 @@ assert 'test static nodes' do
   builder = Mrouter::Builder.new
   assert_kind_of Mrouter::TrieNode, builder.trie
 
-  tag = 'tag'
-  builder.add_route '/abc', tag
+  builder.add_route '/abc', action: '233'
 
   trie = Mrouter::StaticNode.new('')
   child = trie.add_child Mrouter::StaticNode.new('/')
   child = child.add_child Mrouter::StaticNode.new('a')
   child = child.add_child Mrouter::StaticNode.new('b')
   child = child.add_child Mrouter::StaticNode.new('c')
-  child.tag = tag
+  child.params = {action: '233'}
 
   assert_equal trie, builder.trie
 end
@@ -19,8 +18,7 @@ end
 assert 'test dynamic nodes' do
   builder = Mrouter::Builder.new
 
-  tag = 'tag'
-  builder.add_route '/abc(/:id(.:format))/abc', tag
+  builder.add_route '/abc(/:id(.:format))/abc', 'tag'
 
   trie = Mrouter::StaticNode.new('')
   child = trie.add_child Mrouter::StaticNode.new('/')
@@ -43,7 +41,7 @@ assert 'test dynamic nodes' do
     child = child.add_child Mrouter::StaticNode.new('a')
     child = child.add_child Mrouter::StaticNode.new('b')
     child = child.add_child Mrouter::StaticNode.new('c')
-    child.tag = tag
+    child.params = {tag: 'tag'}
   end
 
   assert_equal trie, builder.trie
@@ -71,8 +69,8 @@ assert 'test multiple routes' do
     child = child.add_child Mrouter::StaticNode.new('b')
     leaf_a = child.add_child Mrouter::StaticNode.new('c')
     leaf_b = child.add_child Mrouter::StaticNode.new('d')
-    leaf_a.tag = 'tag_a'
-    leaf_b.tag = 'tag_b'
+    leaf_a.params = {tag: 'tag_a'}
+    leaf_b.params = {tag: 'tag_b'}
   end
 
   assert_equal trie, builder.trie

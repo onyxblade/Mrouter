@@ -8,8 +8,8 @@ assert 'test compression' do
   child_a = child_a.add_child Mrouter::StaticNode.new('/abc')
   child_b = trie.add_child Mrouter::StaticNode.new('abc')
 
-  child_a.tag = 'tag'
-  child_b.tag = 'tag'
+  child_a.params = {tag: 'tag'}
+  child_b.params = {tag: 'tag'}
 
   compressed = Mrouter::Compressor.new(builder.trie).compress!
   assert_equal trie, compressed
@@ -22,10 +22,10 @@ assert 'test multiple routes compression' do
   builder.add_route '/abc/abc', 'tag_b'
 
   trie = Mrouter::StaticNode.new('/abc')
-  trie.tag = 'tag_a'
+  trie.params = {tag: 'tag_a'}
 
   child = trie.add_child Mrouter::StaticNode.new('/abc')
-  child.tag = 'tag_b'
+  child.params = {tag: 'tag_b'}
 
   compressed = Mrouter::Compressor.new(builder.trie).compress!
   assert_equal trie, compressed

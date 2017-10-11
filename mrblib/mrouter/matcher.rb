@@ -1,4 +1,4 @@
-module Mrouter
+class Mrouter
   class Matcher
     def initialize trie
       @trie = trie
@@ -31,13 +31,18 @@ module Mrouter
         params = params.merge(node.value.to_sym => value)
       end
 
-      if (rest == '' || rest == '/') && !node.tag.nil?
-        return params.merge(tag: node.tag)
+      if (rest == '' || rest == '/') && !node.params.nil?
+        return params.merge(node.params)
       else
         if node.children.empty?
           false
         else
-          node.children.map{|child| match_path child, rest, params }.find{|x| x}
+          node.children.each do |child|
+            if matched = match_path(child, rest, params)
+              return matched
+            end
+          end
+          false
         end
       end
     end

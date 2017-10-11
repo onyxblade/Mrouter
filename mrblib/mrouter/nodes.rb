@@ -1,6 +1,6 @@
-module Mrouter
+class Mrouter
   class TrieNode
-    attr_accessor :children, :value, :tag
+    attr_accessor :children, :value, :params
 
     def initialize value
       @value = value
@@ -15,7 +15,7 @@ module Mrouter
     def dynamic?; end
 
     def == another
-      self.class == another.class && self.children == another.children && self.tag == another.tag
+      self.class == another.class && self.children == another.children && self.params == another.params
     end
     alias :eql? :==
 
